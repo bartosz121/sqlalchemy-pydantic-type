@@ -1,0 +1,31 @@
+repos:
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v5.0.0
+  hooks:
+  - id: trailing-whitespace
+  - id: check-added-large-files
+  - id: check-shebang-scripts-are-executable
+  - id: check-docstring-first
+  - id: check-toml
+  - id: check-yaml
+    args: ['--unsafe']
+  - id: end-of-file-fixer
+  - id: mixed-line-ending
+    args: ['--fix=auto']
+
+- repo: local
+  hooks:
+  - id: lint
+    name: Lint
+    entry: hatch run lint
+    types:
+      - python
+    language: system
+    pass_filenames: true
+  - id: typecheck
+    name: Typecheck
+    entry: hatch run typecheck
+    types:
+      - python
+    language: system
+    pass_filenames: false
