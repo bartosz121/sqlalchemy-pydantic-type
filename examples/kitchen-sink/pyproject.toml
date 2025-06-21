@@ -1,0 +1,17 @@
+[project]
+name = "kitchen-sink"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "aiosqlite>=0.21.0",
+    "alembic>=1.16.2",
+    "fastapi[standard]>=0.115.13",
+    "pydantic-settings>=2.9.1",
+    "sqlalchemy-pydantic-type[alembic]>=0.0.1",
+    "sqlalchemy[asyncio]>=2.0.41",
+    "uvicorn[standard]>=0.34.3",
+]
+
+[tool.uv.sources]
