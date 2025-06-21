@@ -1,10 +1,11 @@
-"""
-Dummy conftest.py for `SQLAlchemy Pydantic Type`.
+from pydantic import BaseModel
 
-If you don't know what this is for, just leave it empty.
-Read more about conftest.py under:
-- https://docs.pytest.org/en/stable/fixture.html
-- https://docs.pytest.org/en/stable/writing_plugins.html
-"""
 
-# import pytest
+class Flag(BaseModel):
+    name: str
+    enabled: bool
+
+
+class UserMeta(BaseModel):
+    flags: list[Flag]
+    login_count: int

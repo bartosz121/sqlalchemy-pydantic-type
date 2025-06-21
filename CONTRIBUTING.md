@@ -79,16 +79,12 @@ This often provides additional considerations and avoids unnecessary work.
    cd sqlalchemy-pydantic-type
    ```
 
-4. Make sure [hatch] is installed using [pipx]:
+4. Install [hatch](https://hatch.pypa.io/latest/install/)
+
+5. Create hatch environment
 
    ```console
-   pipx install hatch
-   ```
-
-5. \[only once\] install [pre-commit] hooks in the default environment with:
-
-   ```console
-   hatch run pre-commit install
+   hatch env create
    ```
 
 ### Implement your changes
@@ -117,8 +113,8 @@ This often provides additional considerations and avoids unnecessary work.
 
    Please make sure to see the validation messages from [pre-commit] and fix
    any eventual issues.
-   This should automatically use [flake8]/[black] to check/fix the code style
-   in a way that is compatible with the project.
+   This should automatically use [ruff] to check/fix the code style
+   and [pyright] to check typing in a way that is compatible with the project.
 
     !!! info
         Don't forget to add unit tests and documentation in case your
@@ -131,9 +127,7 @@ This often provides additional considerations and avoids unnecessary work.
         ```
         to look for recurring communication patterns.
 
-5. Please check that your changes don't break any unit tests with
-   `hatch run test:cov` or `hatch run test:no-cov` to run the unitest with
-   or without coverage reports, respectively.
+5. Please check that your changes don't break any unit tests with `hatch run test_containerized`
 
 ### Submit your contribution
 
@@ -155,16 +149,15 @@ This often provides additional considerations and avoids unnecessary work.
     to collectively create software are general and can be applied to all sorts
     of environments, including private companies and proprietary code bases.
 
-[black]: https://pypi.org/project/black/
+[pyright]: https://github.com/microsoft/pyright
+[ruff]: https://github.com/astral-sh/ruff
 [contribution-guide.org]: http://www.contribution-guide.org/
 [creating a PR]: https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request
 [docstrings]: https://peps.python.org/pep-0257/
-[flake8]: https://flake8.pycqa.org/en/stable/
 [git]: https://git-scm.com
 [github web interface]: https://docs.github.com/en/github/managing-files-in-a-repository/managing-files-on-github/editing-files-in-your-repository
 [other kinds of contributions]: https://opensource.guide/how-to-contribute
 [pre-commit]: https://pre-commit.com/
-[pipx]: https://pypa.github.io/pipx/
 [python software foundation's code of conduct]: https://www.python.org/psf/conduct/
 [Google style]: https://google.github.io/styleguide/pyguide.html#38-comments-and-docstrings
 [guide created by FreeCodeCamp]: https://github.com/FreeCodeCamp/how-to-contribute-to-open-source

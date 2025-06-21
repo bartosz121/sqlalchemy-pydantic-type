@@ -10,29 +10,28 @@ build-backend = "hatchling.build"
 name = "sqlalchemy-pydantic-type"
 description = "SQLAlchemy custom type to automatically serialize/deserialize pydantic models"
 readme = "README.md"
-requires-python = ">=3.10"# only license identifier from https://spdx.org/licenses/ are allowed
-license = { text = "MIT"}
+requires-python = ">=3.10"
+license = { text = "MIT" }
 
-keywords = ["keyword_1", "keyword_2"]
-authors = [
-    { name = "Bartosz Magiera", email = "admin@bartoszmagiera.dev" },
-]
-# options under https://pypi.org/classifiers/
+keywords = ["sqlalchemy", "pydantic", "alembic", "sqlalchemy-pydantic-type"]
+authors = [{ name = "Bartosz Magiera", email = "admin@bartoszmagiera.dev" }]
 classifiers = [
     "Development Status :: 2 - Pre-Alpha",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: Implementation :: CPython",
 ]
 
-dependencies = []
 dynamic = ["version"]
+dependencies = ["SQLAlchemy>=2", "pydantic>=2"]
+
+[project.optional-dependencies]
+alembic = ["alembic>=1"]
 
 [project.urls]
-# important URLs for this project
-# ToDo: Modify according to your needs!
 Documentation = "https://github.com/bartosz121/sqlalchemy-pydantic-type"
 Source = "https://github.com/bartosz121/sqlalchemy-pydantic-type"
 Tracker = "https://github.com/bartosz121/sqlalchemy-pydantic-type/issues"
@@ -42,7 +41,6 @@ Tracker = "https://github.com/bartosz121/sqlalchemy-pydantic-type/issues"
 ######################
 
 [tool.hatch.metadata]
-# direct dependency references, e.g `pip @ git+https://github.com/pypa/pip.git@master`
 allow-direct-references = true
 
 [tool.hatch.version]
@@ -56,10 +54,8 @@ version-file = "src/sqlalchemy_pydantic_type/_version.py"
 packages = ["src/sqlalchemy_pydantic_type"]
 
 [tool.hatch.build.targets.sdist]
-exclude = [
-    "/.github",
-    "/.hatch"
-]
+include = ["_version.py"]
+exclude = ["/.github", "/.hatch", "/examples", "/scripts"]
 
 ##################
 # External Tools #
@@ -67,7 +63,7 @@ exclude = [
 
 [tool.pyright]
 include = ["src/sqlalchemy_pydantic_type", "tests"]
-exclude = ["**/__pycache__/**", ".hatch/venv/**"]
+exclude = ["**/__pycache__/**", ".hatch/venv/**", "examples/**"]
 typeCheckingMode = "strict"
 pythonVersion = "3.10"
 venvPath = ".hatch/venv"
@@ -77,22 +73,17 @@ extraPaths = ["src", "tests", "."]
 [tool.pytest.ini_options]
 minversion = "6.0"
 addopts = "-ra -q --doctest-glob='*.md'"
-testpaths = [
-    "tests",
-]
+testpaths = ["tests"]
 
 [tool.coverage.run]
 branch = true
 source = ["src/sqlalchemy_pydantic_type"]
 omit = [
-    "_version.py",  # automatically created by hatch-vcs, not in repo
+    "_version.py", # automatically created by hatch-vcs, not in repo
 ]
 
 [tool.coverage.paths]
-source = [
-    "",
-    "*/site-packages/",
-]
+source = ["", "*/site-packages/"]
 
 [tool.coverage.report]
 # Regexes for lines to exclude from consideration
@@ -118,12 +109,8 @@ exclude_lines = [
 # ruff will use `requires-python` as `target-version` by default
 line-length = 120
 indent-width = 4
-include = [
-    "**/*.py",
-    "**/*.pyi",
-    "tests/**/*.py",
-    "tests/**/*.pyi"
-]
+include = ["**/*.py", "**/*.pyi", "tests/**/*.py", "tests/**/*.pyi"]
+exclude = ["examples/**"]
 
 [tool.ruff.format]
 docstring-code-format = true
@@ -142,7 +129,7 @@ select = [
     "E",
     "EM",
     "F",
-    "FBT", # Boolean trap
+    "FBT",    # Boolean trap
     "I",
     "ICN",
     "ISC",
@@ -168,17 +155,23 @@ ignore = [
     # Allow boolean positional values in function calls, like `dict.get(... True)`
     "FBT003",
     # Ignore checks for possible passwords
-    "S105", "S106", "S107",
+    "S105",
+    "S106",
+    "S107",
     # Ignore complexity
-    "C901", "PLR0911", "PLR0912", "PLR0913", "PLR0915",
+    "C901",
+    "PLR0911",
+    "PLR0912",
+    "PLR0913",
+    "PLR0915",
     "PLC1901", # empty string comparisons
     "PLW2901", # `for` loop variable overwritten
-    "SIM114", # Combine `if` branches using logical `or` operator
-    "E203", # Whitespace before :, needed for black compatability and also `ruff format`
-    "ISC001", # causes unexpected behaviour with formatter
+    "SIM114",  # Combine `if` branches using logical `or` operator
+    "E203",    # Whitespace before :, needed for black compatability and also `ruff format`
+    "ISC001",  # causes unexpected behaviour with formatter
 ]
 unfixable = [
-    # "F401",  # Don't touch unused imports
+    "F401", # Don't touch unused imports
 ]
 
 [tool.ruff.lint.isort]
@@ -210,11 +203,12 @@ dependencies = [
     "pytest",
     "pytest-cov",
     "pytest-mock",
-    "vcrpy",
-    "pytest-recording",
     "pytest-sugar",
-    "hypothesis",
+    "psycopg[binary]>=3.2",
+    "PyMySQL[rsa]>=1.1",
+    "SQLAlchemy-Utils>=0.41",
 ]
+features = ["alembic"]
 
 [tool.hatch.envs.default.scripts]
 cov = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=src/sqlalchemy_pydantic_type --cov=tests {args}"
@@ -222,58 +216,18 @@ cov-cicd = "pytest --cov --cov-branch --cov-report=xml --cov-config=pyproject.to
 no-cov = "cov --no-cov {args}"
 typecheck = [
     "echo \"VERSION: `pyright --version`\"",
-    "pyright --warnings {args}"
+    "pyright --warnings {args}",
 ]
 lint = [
     "echo \"VERSION: `ruff --version`\"",
     "ruff check {args:.}",
     "ruff format --check {args:.}",
 ]
-format = [
-    "ruff format {args:.}",
-    "ruff check --fix {args:.}",
-]
+format = ["ruff format {args:.}", "ruff check --fix {args:.}"]
+test_containerized = ["sh ./scripts/run_tests_docker.sh"]
 
-# Docs environment
-[tool.hatch.envs.docs]
-dependencies = [
-    "mkdocs~=1.6",
-    "mkdocs-material[imaging]~=9.4",
-    # Plugins
-    "mkdocs-include-markdown-plugin",
-    "mkdocs-gen-files",
-    "mkdocs-literate-nav",
-    "mkdocs-minify-plugin~=0.8",
-    "mkdocs-section-index",
-    "mkdocs-git-revision-date-localized-plugin~=1.2",
-    "mkdocstrings[python]",
-    "mkdocs-redirects~=1.2",
-    "mkdocs-glightbox~=0.4.0",
-    "mike~=2.1",
-    # Extensions
-    "pymdown-extensions~=10.9",
-    # Necessary for syntax highlighting in code blocks
-    "pygments~=2.18",
-    # Validation
-    "linkchecker~=10.4",
-]
-
-[tool.hatch.envs.docs.env-vars]
-SOURCE_DATE_EPOCH = "1580601600"
-PYTHONUNBUFFERED = "1"
-MKDOCS_CONFIG = "mkdocs.yml"
-
-[tool.hatch.envs.docs.scripts]
-build = "mkdocs build --config-file {env:MKDOCS_CONFIG} --clean --strict {args}"
-serve = "mkdocs serve --config-file {env:MKDOCS_CONFIG} --dev-addr localhost:8000 {args}"
-ci-build = "mike deploy --config-file {env:MKDOCS_CONFIG} --update-aliases {args}"
-# --ignore-url=None since the SUMMARY.md file leaves a <toc>None</toc> in sitemap.xml
-validate = "linkchecker --config .linkcheckerrc --ignore-url=/reference --ignore-url=None site"
-# https://github.com/linkchecker/linkchecker/issues/678
-build-check = [
-    "build",
-    "validate",
-]
+[tool.hatch.envs.hatch-test]
+template = 'default'
 
 [[tool.hatch.envs.hatch-test.matrix]]
-python = ["3.10","3.11","3.12","3.13"]
+python = ["3.10", "3.11", "3.12", "3.13"]

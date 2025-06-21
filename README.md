@@ -1,39 +1,93 @@
 # SQLAlchemy Pydantic Type
 
-SQLAlchemy custom type to automatically serialize/deserialize pydantic models
+**SQLAlchemy Pydantic Type** is a Python package that bridges SQLAlchemy and Pydantic by providing a custom SQLAlchemy type for seamless serialization and deserialization of Pydantic models as database column values.
+
+The main goal of this project is to make it easy to store and retrieve complex data structures (such as JSON fields) as Pydantic models in your database tables, with automatic conversion between Python objects and database representations. This is especially useful for APIs or applications where you want strong data validation and type safety using Pydantic, while leveraging SQLAlchemy's ORM capabilities.
+
+For example, if you have an `Event` table with a `meta` column of type JSON, you can use `BasePydanticType` to ensure that when you save a Pydantic model to the database, it is automatically serialized to JSON, and when you load it, it is deserialized back into your Pydantic model. The serialization/deserialization logic can be customized by overriding methods or passing custom callables.
+
+See the [examples](examples/) directory for real-world usage.
 
 ## Features
 
-* Feature 1
-* Feature 2
-* ...
+- **Automatic serialization/deserialization** of Pydantic models to/from database columns (e.g., JSON, String).
+- **Customizable serialization**: Override methods or provide custom serializer/deserializer functions.
+- **Easy integration** with SQLAlchemy ORM and Core.
+- **Type safety**: Ensures your database fields are always valid Pydantic models.
+- **Alembic support**: Includes helpers for proper autogeneration of migration scripts.
+
+## Example
+
+Here's how you can create a custom type that serializes Pydantic models to and from JSON strings:
+
+```python
+from sqlalchemy_pydantic_type import BasePydanticType
+from sqlalchemy import String
+from pydantic import BaseModel
+
+class PydanticString(BasePydanticType):
+    """
+    Custom type that serializes Pydantic models to JSON strings and
+    deserializes JSON strings back into Pydantic models.
+    """
+    impl = String
+    cache_ok = True
+
+    def _default_model_serializer(self, model: BaseModel) -> Any:
+        return model.model_dump_json()
+
+    def _default_model_deserializer(self, value: Any | None) -> BaseModel:
+        return self._pydantic_model_type.model_validate_json(value)
+
+class UserMeta(BaseModel):
+    roles: list[str]
+    is_active: bool
+
+class User(Base):
+    __tablename__ = "users"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    meta: Mapped[UserMeta] = mapped_column(PydanticString(UserMeta))
+```
+
+In this example, the `meta` column will automatically handle conversion between `UserMeta` Pydantic objects and JSON strings in the database.
+
+## Alembic Support
+
+To enable proper migration script generation when using SQLAlchemy Pydantic Type with Alembic, follow these steps:
+
+1. Install the package with Alembic support:
+    ```bash
+    pip install sqlalchemy_pydantic_type[alembic]
+    ```
+
+2. In your Alembic environment (`env.py`), import the `render_item` function:
+    ```python
+    from sqlalchemy_pydantic_type.alembic import render_item
+    ```
+
+3. Add the `render_item` argument to all `context.configure()` calls:
+    ```python
+    context.configure(
+        url=url,
+        target_metadata=target_metadata,
+        literal_binds=True,
+        render_item=render_item,  # Add this line
+        dialect_opts={"paramstyle": "named"},
+    )
+    ```
+
+This ensures that Alembic correctly generates migration scripts for columns using Pydantic types.
+
+For a complete working example, check out the [kitchen sink example](examples/kitchen_sink) in the examples directory.
 
 ## Development
 
-To set up [hatch] and [pre-commit] for the first time:
-
-1. install [hatch] globally, e.g. with [pipx], i.e. `pipx install hatch`,
-2. make sure `pre-commit` is installed globally, e.g. with `pipx install pre-commit`.
-
-A special feature that makes hatch very different from other familiar tools is that you almost never
-activate, or enter, an environment. Instead, you use `hatch run env_name:command` and the `default` environment
-is assumed for a command if there is no colon found. Thus you must always define your environment in a declarative
-way and hatch makes sure that the environment reflects your declaration by updating it whenever you issue
-a `hatch run ...`. This helps with reproducability and avoids forgetting to specify dependencies since the
-hatch workflow is to specify everything directly in [pyproject.toml](pyproject.toml). Only in rare cases, you
-will use `hatch shell` to enter the `default` environment, which is similar to what you may know from other tools.
-
-To get you started, use `hatch run test:cov` or `hatch run test:no-cov` to run the unitest with or without coverage reports,
-respectively. Use `hatch run lint:all` to run all kinds of typing and linting checks. Try to automatically fix linting
-problems with `hatch run lint:fix` and use `hatch run docs:serve` to build and serve your documentation.
-You can also easily define your own environments and commands. Check out the environment setup of hatch
-in [pyproject.toml](pyproject.toml) for more commands as well as the package, build and tool configuration.
+For details on setting up the development environment and contributing, see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Credits
 
 This package was created with [The Hatchlor] project template.
 
-[The Hatchlor]: https://github.com/florianwilhelm/the-hatchlor
-[pipx]: https://pypa.github.io/pipx/
+[The Hatchlor]: https://github.com/bartosz121/the-hatchlor
 [hatch]: https://hatch.pypa.io/
-[pre-commit]: https://pre-commit.com/

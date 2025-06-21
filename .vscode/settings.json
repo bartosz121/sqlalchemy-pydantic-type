@@ -1,0 +1,11 @@
+{
+  "editor.rulers": [120],
+  "search.exclude": {
+    "**/*.code-search": true,
+    "**/.hatch/venv/": true,
+    "**/.ruff_cache": true,
+    "**/.pytest_cache": true,
+    "**/__pycache__": true,
+    "examples/**/.venv/": true
+  }
+}

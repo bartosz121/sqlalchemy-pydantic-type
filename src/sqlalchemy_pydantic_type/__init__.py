@@ -6,3 +6,11 @@ except PackageNotFoundError:  # pragma: no cover
     __version__ = "unknown"
 finally:
     del version, PackageNotFoundError
+
+
+from sqlalchemy_pydantic_type.core import BasePydanticType
+
+__all__ = [
+    "BasePydanticType",
+    "__version__",
+]
