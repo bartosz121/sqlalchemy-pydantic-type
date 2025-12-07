@@ -52,6 +52,7 @@ def mysql_db() -> Generator[Session, Any, Any]:
     with sessionmaker_() as session:
         yield session
 
+    engine.dispose()
     drop_database(db_url)
 
 
