@@ -11,6 +11,7 @@ See the [examples](examples/) directory for real-world usage.
 ## Features
 
 - **Automatic serialization/deserialization** of Pydantic models to/from database columns (e.g., JSON, String).
+- **Support for dataclasses and other types** via Pydantic's `TypeAdapter`.
 - **Customizable serialization**: Override methods or provide custom serializer/deserializer functions.
 - **Easy integration** with SQLAlchemy ORM and Core.
 - **Type safety**: Ensures your database fields are always valid Pydantic models.
@@ -18,12 +19,23 @@ See the [examples](examples/) directory for real-world usage.
 
 ## Example
 
-Here's how you can create a custom type that serializes Pydantic models to and from JSON strings:
+### Using `BasePydanticType` with Pydantic models
+
+Use `BasePydanticType` when your data is defined as a Pydantic `BaseModel`:
 
 ```python
-from sqlalchemy_pydantic_type import BasePydanticType
-from sqlalchemy import String
+from typing import Any
+
 from pydantic import BaseModel
+from sqlalchemy import String
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+
+from sqlalchemy_pydantic_type import BasePydanticType
+
+
+class Base(DeclarativeBase):
+    pass
+
 
 class PydanticString(BasePydanticType):
     """
@@ -39,9 +51,11 @@ class PydanticString(BasePydanticType):
     def _default_model_deserializer(self, value: Any | None) -> BaseModel:
         return self._pydantic_model_type.model_validate_json(value)
 
+
 class UserMeta(BaseModel):
     roles: list[str]
     is_active: bool
+
 
 class User(Base):
     __tablename__ = "users"
@@ -51,6 +65,64 @@ class User(Base):
 ```
 
 In this example, the `meta` column will automatically handle conversion between `UserMeta` Pydantic objects and JSON strings in the database.
+
+### Using `BaseTypeAdapterType` with dataclasses and other types
+
+Use `BaseTypeAdapterType` when your data is defined as a dataclass, `TypedDict`, or any other type supported by Pydantic's `TypeAdapter`:
+
+```python
+from dataclasses import dataclass
+from typing import Any
+
+from pydantic import TypeAdapter
+from sqlalchemy import JSON, String
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+
+from sqlalchemy_pydantic_type import BaseTypeAdapterType
+
+
+class Base(DeclarativeBase):
+    pass
+
+
+@dataclass
+class Address:
+    street: str
+    city: str
+
+
+@dataclass
+class UserProfile:
+    name: str
+    age: int
+    address: Address
+
+
+# Create a TypeAdapter for the dataclass
+user_profile_adapter = TypeAdapter(UserProfile)
+
+
+# Option 1: Specify the exact type
+class UserProfileJSON(BaseTypeAdapterType[UserProfile]):
+    impl = JSON
+    cache_ok = True
+
+
+# Option 2: Reusable version - use `Any` to work with any TypeAdapter
+class TypeAdapterJSON(BaseTypeAdapterType[Any]):
+    impl = JSON
+    cache_ok = True
+
+
+class User(Base):
+    __tablename__ = "users"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str]
+    profile: Mapped[UserProfile] = mapped_column(UserProfileJSON(user_profile_adapter))
+```
+
+In this example, the `profile` column stores a Python dataclass as JSON in the database, with automatic serialization and deserialization.
 
 ## Alembic Support
 
