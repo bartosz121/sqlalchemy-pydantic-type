@@ -1,6 +1,6 @@
 from typing import Any
 
-from sqlalchemy_pydantic_type.core import BasePydanticType
+from sqlalchemy_pydantic_type.core import BasePydanticType, BaseTypeAdapterType
 
 try:
     from alembic.autogenerate.api import AutogenContext
@@ -14,10 +14,10 @@ except ImportError as e:
 
 def render_item(type_: str, obj: Any, autogen_context: AutogenContext):
     """
-    Apply custom rendering for instances of `BasePydanticType`
+    Apply custom rendering for instances of `BasePydanticType` and `BaseTypeAdapterType`
     """
 
-    if type_ == "type" and isinstance(obj, BasePydanticType):
+    if type_ == "type" and isinstance(obj, (BasePydanticType, BaseTypeAdapterType)):
         return _repr_type(obj.impl_instance, autogen_context)
 
     # default rendering for others
