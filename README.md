@@ -1,21 +1,16 @@
 # SQLAlchemy Pydantic Type
 
-**SQLAlchemy Pydantic Type** is a Python package that bridges SQLAlchemy and Pydantic by providing a custom SQLAlchemy type for seamless serialization and deserialization of Pydantic models as database column values.
+![License](https://img.shields.io/github/license/bartosz121/sqlalchemy-pydantic-type)
+![Build](https://img.shields.io/github/actions/workflow/status/bartosz121/sqlalchemy-pydantic-type/build.yml)
+![Codecov](https://img.shields.io/codecov/c/github/bartosz121/sqlalchemy-pydantic-type)
+![PyPI Version](https://img.shields.io/pypi/v/sqlalchemy-pydantic-type)
+![Python Version](https://img.shields.io/pypi/pyversions/sqlalchemy-pydantic-type)
 
-The main goal of this project is to make it easy to store and retrieve complex data structures (such as JSON fields) as Pydantic models in your database tables, with automatic conversion between Python objects and database representations. This is especially useful for APIs or applications where you want strong data validation and type safety using Pydantic, while leveraging SQLAlchemy's ORM capabilities.
+**SQLAlchemy Pydantic Type** is a Python package that bridges SQLAlchemy and Pydantic by providing a custom SQLAlchemy type for automatic serialization and deserialization of Pydantic models as database column values.
 
-For example, if you have an `Event` table with a `meta` column of type JSON, you can use `BasePydanticType` to ensure that when you save a Pydantic model to the database, it is automatically serialized to JSON, and when you load it, it is deserialized back into your Pydantic model. The serialization/deserialization logic can be customized by overriding methods or passing custom callables.
+The main goal of this project is to make it easy to store and retrieve complex data structures (such as JSON fields) as Pydantic models in your SQLAlchemy 2.0 ORM models, with automatic conversion between Python objects and database representations.
 
 See the [examples](examples/) directory for real-world usage.
-
-## Features
-
-- **Automatic serialization/deserialization** of Pydantic models to/from database columns (e.g., JSON, String).
-- **Support for dataclasses and other types** via Pydantic's `TypeAdapter`.
-- **Customizable serialization**: Override methods or provide custom serializer/deserializer functions.
-- **Easy integration** with SQLAlchemy ORM and Core.
-- **Type safety**: Ensures your database fields are always valid Pydantic models.
-- **Alembic support**: Includes helpers for proper autogeneration of migration scripts.
 
 ## Example
 
