@@ -60,6 +60,7 @@ jobs:
       - uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+          slug: bartosz121/sqlalchemy-pydantic-type
           fail_ci_if_error: true
           verbose: true
 
