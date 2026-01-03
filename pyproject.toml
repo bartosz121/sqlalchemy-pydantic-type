@@ -80,6 +80,7 @@ branch = true
 source = ["src/sqlalchemy_pydantic_type"]
 omit = [
     "_version.py", # automatically created by hatch-vcs, not in repo
+    "tests/**",
 ]
 
 [tool.coverage.paths]
@@ -211,8 +212,8 @@ dependencies = [
 features = ["alembic"]
 
 [tool.hatch.envs.default.scripts]
-cov = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=src/sqlalchemy_pydantic_type --cov=tests {args}"
-cov-cicd = "pytest --cov --cov-branch --cov-report=xml --cov-config=pyproject.toml --cov=src/sqlalchemy_pydantic_type --cov=tests {args}"
+cov = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=src/sqlalchemy_pydantic_type {args}"
+cov-cicd = "pytest --cov --cov-branch --cov-report=xml --cov-config=pyproject.toml --cov=src/sqlalchemy_pydantic_type {args}"
 no-cov = "cov --no-cov {args}"
 typecheck = [
     "echo \"VERSION: `pyright --version`\"",
