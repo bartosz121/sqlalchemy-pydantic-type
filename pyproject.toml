@@ -230,4 +230,4 @@ test_containerized = ["sh ./scripts/run_tests_docker.sh"]
 template = 'default'
 
 [[tool.hatch.envs.hatch-test.matrix]]
-python = ["3.10", "3.11", "3.12", "3.13"]
+python = ["3.10", "3.11", "3.12", "3.13", "3.14", "3.14t"]
