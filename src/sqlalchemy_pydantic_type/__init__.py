@@ -8,9 +8,10 @@ finally:
     del version, PackageNotFoundError
 
 
-from sqlalchemy_pydantic_type.core import BasePydanticType
+from sqlalchemy_pydantic_type.core import BasePydanticType, BaseTypeAdapterType
 
 __all__ = [
     "BasePydanticType",
+    "BaseTypeAdapterType",
     "__version__",
 ]
