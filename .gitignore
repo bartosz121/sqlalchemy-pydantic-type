@@ -112,3 +112,4 @@ src/sqlalchemy_pydantic_type/_version.py
 # MacOS files
 .DS_Store
 todo.db
+examples/**/uv.lock

@@ -2,7 +2,7 @@ from logging.config import fileConfig
 
 from alembic import context
 from sqlalchemy import engine_from_config, pool
-from todo_api.main import AuditDb, Base, TodoDb  # noqa: F401
+from todo_api.main import Base, User  # noqa: F401
 
 from sqlalchemy_pydantic_type.alembic import render_item
 

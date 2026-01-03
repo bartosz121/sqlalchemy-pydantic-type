@@ -9,7 +9,7 @@ dependencies = [
     "alembic>=1.16.2",
     "fastapi[standard]>=0.115.13",
     "pydantic-settings>=2.9.1",
-    "sqlalchemy-pydantic-type[alembic]>=0.0.1",
+    "sqlalchemy-pydantic-type[alembic]",
     "sqlalchemy[asyncio]>=2.0.41",
     "uvicorn[standard]>=0.34.3",
 ]
