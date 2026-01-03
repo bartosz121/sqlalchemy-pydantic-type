@@ -146,7 +146,7 @@ To enable proper migration script generation when using SQLAlchemy Pydantic Type
 
 This ensures that Alembic correctly generates migration scripts for columns using Pydantic types.
 
-For a complete working example, check out the [kitchen sink example](examples/kitchen_sink) in the examples directory.
+For a complete working example, check out the [kitchen-sink example](examples/kitchen-sink) in the examples directory.
 
 ## Development
 
