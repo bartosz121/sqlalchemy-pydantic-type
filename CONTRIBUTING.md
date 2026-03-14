@@ -127,7 +127,9 @@ This often provides additional considerations and avoids unnecessary work.
         ```
         to look for recurring communication patterns.
 
-5. Please check that your changes don't break any unit tests with `hatch run test_containerized`
+5. Please check that your changes don't break the default local test path with `hatch run test-unit`.
+
+6. If your changes affect the MySQL or PostgreSQL integration tests, run them via Docker with `hatch run test-containerized` or target only those tests with `hatch run test-integration` when the required services are available.
 
 ### Submit your contribution
 
