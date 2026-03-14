@@ -1,0 +1,20 @@
+bug:
+  - '\b(bug|broken|crash|error|exception|fail(?:s|ed|ing)?)\b'
+documentation:
+  - '\b(docs?|documentation|readme|mkdocs)\b'
+enhancement:
+  - '\b(enhancement|feature|proposal|request)\b'
+question:
+  - '\b(question|how (?:do|to) |help me|usage)\b'
+performance:
+  - '\b(perf(?:ormance)?|slow|latency|throughput)\b'
+testing:
+  - '\b(test(?:ing)?|pytest|coverage)\b'
+build:
+  - '\b(build|packag(?:e|ing)|publish|pypi|wheel|sdist)\b'
+ci:
+  - '\b(ci|continuous integration|workflow)\b'
+dependencies:
+  - '\b(dependenc(?:y|ies)|upgrade|bump|version)\b'
+github_actions:
+  - '\b(github actions|actions workflow)\b'

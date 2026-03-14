@@ -1,0 +1,23 @@
+name: Issue labeler
+
+on:
+  issues:
+    types:
+      - opened
+      - edited
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  label:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Apply issue labels
+        uses: github/issue-labeler@v3.4
+        with:
+          configuration-path: .github/issue-labeler.yml
+          include-title: 1
+          enable-versioned-regex: 0
+          repo-token: ${{ github.token }}
