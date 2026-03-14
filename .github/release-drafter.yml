@@ -2,19 +2,55 @@ name-template: '$RESOLVED_VERSION'
 tag-template: 'v$RESOLVED_VERSION'
 
 categories:
+  - title: 'Breaking Changes'
+    labels:
+      - 'breaking'
+      - 'removal'
   - title: 'Features'
     labels:
-      - 'feat'
+      - 'enhancement'
   - title: 'Bug Fixes'
     labels:
-      - 'fix'
-  - title: 'Other updates'
+      - 'bug'
+  - title: 'Documentation'
     labels:
-      - 'refactor'
-      - 'chore'
-      - 'docs'
-      - 'perf'
-      - 'test'
+      - 'documentation'
+  - title: 'Performance'
+    labels:
+      - 'performance'
+  - title: 'Refactoring'
+    labels:
+      - 'refactoring'
+  - title: 'Testing'
+    labels:
+      - 'testing'
+  - title: 'Build & CI'
+    labels:
+      - 'build'
+      - 'ci'
+      - 'dependencies'
+
+include-labels:
+  - 'breaking'
+  - 'removal'
+  - 'enhancement'
+  - 'bug'
+  - 'documentation'
+  - 'performance'
+  - 'refactoring'
+  - 'testing'
+  - 'build'
+  - 'ci'
+  - 'dependencies'
+
+exclude-labels:
+  - 'duplicate'
+  - 'good first issue'
+  - 'help wanted'
+  - 'invalid'
+  - 'question'
+  - 'style'
+  - 'wontfix'
 
 change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
 change-title-escapes: '\<*_&' # You can add # and @ to disable mentions, and add ` to disable code blocks.
@@ -22,14 +58,77 @@ change-title-escapes: '\<*_&' # You can add # and @ to disable mentions, and add
 version-resolver:
   major:
     labels:
-      - 'major'
+      - 'breaking'
+      - 'removal'
   minor:
     labels:
-      - 'minor'
-  patch:
-    labels:
-      - 'patch'
+      - 'enhancement'
   default: patch
+
+autolabeler:
+  - label: 'breaking'
+    title:
+      - '/^[a-z]+(\([^)]+\))?!:/i'
+      - '/\bbreaking\b/i'
+  - label: 'enhancement'
+    title:
+      - '/^(feat|feature)(\([^)]+\))?:/i'
+    branch:
+      - '/^(feat|feature)\//i'
+  - label: 'bug'
+    title:
+      - '/^(fix|bugfix)(\([^)]+\))?:/i'
+    branch:
+      - '/^fix\//i'
+  - label: 'documentation'
+    files:
+      - 'docs/**'
+      - '**/*.md'
+      - 'mkdocs.yml'
+    title:
+      - '/^(docs?|documentation)(\([^)]+\))?:/i'
+  - label: 'performance'
+    title:
+      - '/^(perf|performance)(\([^)]+\))?:/i'
+  - label: 'refactoring'
+    title:
+      - '/^refactor(\([^)]+\))?:/i'
+  - label: 'testing'
+    files:
+      - 'tests/**'
+    title:
+      - '/^test(\([^)]+\))?:/i'
+  - label: 'build'
+    files:
+      - 'pyproject.toml'
+      - 'requirements*.txt'
+      - 'constraints*.txt'
+      - '.python-version'
+    title:
+      - '/^build(\([^)]+\))?:/i'
+  - label: 'ci'
+    files:
+      - '.github/workflows/**'
+      - '.github/actions/**'
+    title:
+      - '/^ci(\([^)]+\))?:/i'
+  - label: 'dependencies'
+    branch:
+      - '/^(dependabot|renovate)\//i'
+    title:
+      - '/dependabot/i'
+      - '/dependencies/i'
+  - label: 'github_actions'
+    files:
+      - '.github/workflows/**'
+      - '.github/actions/**'
+  - label: 'python'
+    files:
+      - 'src/**/*.py'
+      - 'tests/**/*.py'
+  - label: 'style'
+    title:
+      - '/^style(\([^)]+\))?:/i'
 
 template: |
   ## Changes
