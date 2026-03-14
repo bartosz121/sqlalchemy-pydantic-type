@@ -13,6 +13,8 @@ from sqlalchemy_utils import create_database, database_exists, drop_database  # 
 from sqlalchemy_pydantic_type import BasePydanticType
 from tests.conftest import Flag, UserMeta
 
+pytestmark = pytest.mark.integration
+
 
 class PydanticJSON(BasePydanticType):
     impl = JSON

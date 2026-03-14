@@ -75,6 +75,9 @@ extraPaths = ["src", "tests", "."]
 minversion = "6.0"
 addopts = "-ra -q --doctest-glob='*.md'"
 testpaths = ["tests"]
+markers = [
+    "integration: tests that require external services such as MySQL or PostgreSQL",
+]
 
 [tool.coverage.run]
 branch = true
@@ -216,6 +219,8 @@ features = ["alembic"]
 cov = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=src/sqlalchemy_pydantic_type {args}"
 cov-cicd = "pytest --cov --cov-branch --cov-report=xml --cov-config=pyproject.toml --cov=src/sqlalchemy_pydantic_type {args}"
 no-cov = "cov --no-cov {args}"
+test-unit = "pytest -m \"not integration\" {args}"
+test-integration = "pytest -m integration {args}"
 typecheck = [
     "echo \"VERSION: `pyright --version`\"",
     "pyright --warnings {args}",
@@ -226,7 +231,7 @@ lint = [
     "ruff format --check {args:.}",
 ]
 format = ["ruff format {args:.}", "ruff check --fix {args:.}"]
-test_containerized = ["sh ./scripts/run_tests_docker.sh"]
+test-containerized = ["sh ./scripts/run_tests_docker.sh"]
 
 [tool.hatch.envs.hatch-test]
 template = 'default'
