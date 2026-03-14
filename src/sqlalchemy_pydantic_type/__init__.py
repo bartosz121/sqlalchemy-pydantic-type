@@ -1,6 +1,6 @@
 from importlib.metadata import PackageNotFoundError, version
 
-try:
+try:  # noqa: RUF067
     __version__ = version("sqlalchemy-pydantic-type")
 except PackageNotFoundError:  # pragma: no cover
     __version__ = "unknown"
